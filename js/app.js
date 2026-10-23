@@ -173,13 +173,16 @@ const renderPicked = (result, resolved) => {
 // Une famille à la fois : les chips en haut choisissent les cartes affichées.
 const renderDeck = () => {
   const handFull = state.hand.length >= HAND_SIZE;
-  const inPlay = (suit) => [...state.hand, ...state.afterlife].filter((id) => cardById(id).suit === suit).length;
+  const countIn = (ids, suit) => ids.filter((id) => cardById(id).suit === suit).length;
   const tabs = Object.keys(SUITS).map((suit) => {
-    const used = inPlay(suit);
+    const inHand = countIn(state.hand, suit);
+    const inAfterlife = countIn(state.afterlife, suit);
     return `
       <button class="suit-tab ${suit === state.suit ? 'active' : ''}" data-suit="${suit}" role="tab"
         aria-selected="${suit === state.suit}" style="--suit:${SUITS[suit].color}">
-        ${t(`suits.${suit}`)}${used ? `<span class="badge">${used}</span>` : ''}
+        <span class="label">${t(`suits.${suit}`)}</span>
+        ${inHand ? `<span class="badge" title="${t('ui.hand')}">${inHand}</span>` : ''}
+        ${inAfterlife ? `<span class="badge dead" title="${t('ui.afterlife')}">☠ ${inAfterlife}</span>` : ''}
       </button>`;
   }).join('');
 
@@ -197,9 +200,8 @@ const renderDeck = () => {
                 <span class="strength">${c.strength}</span>
                 <span class="name">${cardName(c.id)}</span>
               </span>
-              ${c.tags.length ? `<span class="tags">${tagList(c.tags)}</span>` : ''}
+              ${c.tags.length || c.promo ? `<span class="tags">${c.promo ? `<span class="promo">${t('ui.promo')}</span>` : ''}${tagList(c.tags)}</span>` : ''}
               <span class="text">${cardText(c.id)}</span>
-              ${c.promo ? `<span class="flag promo">${t('ui.promo')}</span>` : ''}
             </button>`;
         }).join('')}
       </div>
