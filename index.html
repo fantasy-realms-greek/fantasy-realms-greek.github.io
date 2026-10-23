@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fantasy Realms: Greek Legends – Score</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@800&family=Cinzel+Decorative:wght@900&family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">
+      <h1>Fantasy Realms</h1>
+      <span class="plaque" data-i18n="ui.subtitle"></span>
+    </div>
+    <div class="scorebox">
+      <div class="count"><span id="hand-count">0</span>/<span id="hand-max">7</span></div>
+      <div class="score" id="total-score">0</div>
+      <button id="reset" class="icon-btn" data-i18n-title="ui.reset" aria-label="reset">↻</button>
+    </div>
+  </header>
+
+  <main>
+    <nav class="mode" role="radiogroup">
+      <span data-i18n="ui.addTo"></span>
+      <button data-mode="hand" class="active" data-i18n="ui.hand"></button>
+      <button data-mode="afterlife" data-i18n="ui.afterlife"></button>
+    </nav>
+
+    <section class="panel">
+      <h2 data-i18n="ui.hand"></h2>
+      <ul id="hand" class="picked"></ul>
+      <p class="empty" id="hand-empty" data-i18n="ui.emptyHand"></p>
+    </section>
+
+    <section class="panel afterlife">
+      <h2><span data-i18n="ui.afterlife"></span> <small id="afterlife-score"></small></h2>
+      <ul id="afterlife" class="picked"></ul>
+      <p class="empty" id="afterlife-empty" data-i18n="ui.emptyAfterlife"></p>
+    </section>
+
+    <section id="deck"></section>
+  </main>
+
+  <footer>
+    <label>🌐
+      <select id="lang"></select>
+    </label>
+    <p data-i18n="ui.disclaimer"></p>
+  </footer>
+
+  <script src="i18n/fr.js"></script>
+  <script src="i18n/en.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

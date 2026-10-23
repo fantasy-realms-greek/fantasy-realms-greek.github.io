@@ -1,0 +1,8 @@
+{
+  "name": "fantasy-realms-greek",
+  "private": true,
+  "description": "Calculateur de score non officiel pour Fantasy Realms : Mythes grecs",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
