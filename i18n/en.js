@@ -2,8 +2,8 @@ window.I18N = window.I18N || {};
 I18N.en = {
   label: 'English',
   ui: {
-    pageTitle: 'Fantasy Realms: Greek Legends score calculator',
-    metaDescription: 'Free score calculator for Fantasy Realms: Greek Legends. Pick your 7 cards and your Afterlife: bonuses, penalties and endgame effects are scored automatically.',
+    pageTitle: 'Fantasy Realms: Greek Legends – score calculator (scoring)',
+    metaDescription: 'Free score calculator (scoring) for Fantasy Realms: Greek Legends. Pick your 7 cards and your Afterlife: bonuses, penalties and endgame effects are scored automatically.',
     intro: 'Score calculator for Fantasy Realms: Greek Legends. Tap your 7 cards and the ones in your Afterlife: bonuses, penalties and endgame effects are worked out for you.',
     subtitle: 'Greek Legends',
     reset: 'Reset',
