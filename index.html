@@ -3,7 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fantasy Realms: Greek Legends – Score</title>
+  <title>Calculateur de score Fantasy Realms : Mythes grecs</title>
+  <meta name="description" content="Calculateur de score gratuit pour Fantasy Realms : Mythes grecs (Greek Legends). Choisissez vos 7 cartes et votre Au-delà : bonus, malus et effets de fin de partie sont calculés automatiquement.">
+  <link rel="alternate" hreflang="fr" href="https://fantasy-realms-greek.github.io/?lang=fr">
+  <link rel="alternate" hreflang="en" href="https://fantasy-realms-greek.github.io/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://fantasy-realms-greek.github.io/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fantasy Realms : Mythes grecs">
+  <meta property="og:title" content="Calculateur de score Fantasy Realms : Mythes grecs">
+  <meta property="og:description" content="Choisissez vos 7 cartes et votre Au-delà : le score est calculé automatiquement.">
+  <meta property="og:url" content="https://fantasy-realms-greek.github.io/">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:locale:alternate" content="en_US">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Calculateur de score Fantasy Realms : Mythes grecs",
+    "alternateName": "Fantasy Realms: Greek Legends score calculator",
+    "url": "https://fantasy-realms-greek.github.io/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web",
+    "inLanguage": ["fr", "en"],
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@800&family=Cinzel+Decorative:wght@900&family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
@@ -11,11 +37,12 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="logo">
-      <h1>Fantasy Realms</h1>
-      <span class="plaque" data-i18n="ui.subtitle"></span>
-    </div>
+    <h1 class="logo">
+      <span class="logo-name">Fantasy Realms</span>
+      <span class="plaque" data-i18n="ui.subtitle">Mythes grecs</span>
+    </h1>
     <div class="scorebox">
+      <select id="lang" class="lang" aria-label="Langue / Language"></select>
       <div class="count"><span id="hand-count">0</span>/<span id="hand-max">7</span></div>
       <div class="score" id="total-score">0</div>
       <button id="reset" class="icon-btn" data-i18n-title="ui.reset" aria-label="reset">↻</button>
@@ -23,32 +50,31 @@
   </header>
 
   <main>
+    <p class="intro" data-i18n="ui.intro">Calculateur de score pour Fantasy Realms : Mythes grecs. Touchez vos 7 cartes et celles de votre Au-delà : bonus, malus et effets de fin de partie sont calculés pour vous.</p>
+
     <nav class="mode" role="radiogroup">
-      <span data-i18n="ui.addTo"></span>
-      <button data-mode="hand" class="active" data-i18n="ui.hand"></button>
-      <button data-mode="afterlife" data-i18n="ui.afterlife"></button>
+      <span data-i18n="ui.addTo">Ajouter à :</span>
+      <button data-mode="hand" class="active" data-i18n="ui.hand">Main</button>
+      <button data-mode="afterlife" data-i18n="ui.afterlife">Au-delà</button>
     </nav>
 
     <section class="panel">
-      <h2 data-i18n="ui.hand"></h2>
+      <h2 data-i18n="ui.hand">Main</h2>
       <ul id="hand" class="picked"></ul>
-      <p class="empty" id="hand-empty" data-i18n="ui.emptyHand"></p>
+      <p class="empty" id="hand-empty" data-i18n="ui.emptyHand">Touchez une carte ci-dessous pour l’ajouter à votre main.</p>
     </section>
 
     <section class="panel afterlife">
-      <h2><span data-i18n="ui.afterlife"></span> <small id="afterlife-score"></small></h2>
+      <h2><span data-i18n="ui.afterlife">Au-delà</span> <small id="afterlife-score"></small></h2>
       <ul id="afterlife" class="picked"></ul>
-      <p class="empty" id="afterlife-empty" data-i18n="ui.emptyAfterlife"></p>
+      <p class="empty" id="afterlife-empty" data-i18n="ui.emptyAfterlife">Aucune carte dans l’Au-delà.</p>
     </section>
 
     <section id="deck"></section>
   </main>
 
   <footer>
-    <label>🌐
-      <select id="lang"></select>
-    </label>
-    <p data-i18n="ui.disclaimer"></p>
+    <p data-i18n="ui.disclaimer">Calculateur non officiel, réalisé par des fans. Fantasy Realms est une marque de WizKids ; édition française Don’t Panic Games.</p>
   </footer>
 
   <script src="i18n/fr.js"></script>

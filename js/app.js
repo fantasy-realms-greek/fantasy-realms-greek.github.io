@@ -29,7 +29,13 @@ const t = (path, vars = {}) => {
 const cardName = (id) => t(`cards.${id}.name`);
 const cardText = (id) => t(`cards.${id}.text`);
 
+const SITE_URL = 'https://fantasy-realms-greek.github.io/';
+const OG_LOCALES = { fr: 'fr_FR', en: 'en_US' };
+
+// Priorité : ?lang= dans l'URL (une adresse par langue pour Google), puis le dernier choix, puis le navigateur.
 const pickLang = () => {
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  if (I18N[fromUrl]) return fromUrl;
   const saved = storage.load();
   if (saved.lang && I18N[saved.lang]) return saved.lang;
   const nav = (navigator.language || 'fr').slice(0, 2);
@@ -70,9 +76,31 @@ const setChoice = (cardId, key, value) => {
 
 const tagList = (tags) => tags.map((tag) => t(`tags.${tag}`)).join(', ');
 
-const renderStatic = () => {
+const setMeta = (selector, attr, value) => {
+  let el = document.head.querySelector(selector);
+  if (!el) {
+    el = document.createElement(selector.startsWith('link') ? 'link' : 'meta');
+    const [, key, name] = selector.match(/\[(\w+)="([^"]+)"\]/);
+    el.setAttribute(key, name);
+    document.head.append(el);
+  }
+  el.setAttribute(attr, value);
+};
+
+const renderHead = () => {
+  const url = `${SITE_URL}?lang=${state.lang}`;
   document.documentElement.lang = state.lang;
-  document.title = `${t('ui.title')} – Score`;
+  document.title = t('ui.pageTitle');
+  setMeta('meta[name="description"]', 'content', t('ui.metaDescription'));
+  setMeta('link[rel="canonical"]', 'href', new URLSearchParams(location.search).has('lang') ? url : SITE_URL);
+  setMeta('meta[property="og:title"]', 'content', t('ui.pageTitle'));
+  setMeta('meta[property="og:description"]', 'content', t('ui.metaDescription'));
+  setMeta('meta[property="og:url"]', 'content', url);
+  setMeta('meta[property="og:locale"]', 'content', OG_LOCALES[state.lang]);
+};
+
+const renderStatic = () => {
+  renderHead();
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = t(el.dataset.i18n);
   });
@@ -194,11 +222,12 @@ const init = () => {
   state.choices = saved.choices && typeof saved.choices === 'object' ? saved.choices : {};
 
   $('#lang').innerHTML = Object.entries(I18N)
-    .map(([code, dict]) => `<option value="${code}">${dict.label}</option>`)
+    .map(([code, dict]) => `<option value="${code}" title="${dict.label}">${code.toUpperCase()}</option>`)
     .join('');
   $('#lang').value = state.lang;
   $('#lang').addEventListener('change', (e) => {
     state.lang = e.target.value;
+    history.replaceState(null, '', `?lang=${state.lang}`);
     renderStatic();
     render();
   });

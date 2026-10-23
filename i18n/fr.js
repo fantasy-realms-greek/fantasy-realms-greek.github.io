@@ -2,7 +2,9 @@ window.I18N = window.I18N || {};
 I18N.fr = {
   label: 'Français',
   ui: {
-    title: 'Fantasy Realms : Mythes grecs',
+    pageTitle: 'Calculateur de score Fantasy Realms : Mythes grecs',
+    metaDescription: 'Calculateur de score gratuit pour Fantasy Realms : Mythes grecs (Greek Legends). Choisissez vos 7 cartes et votre Au-delà : bonus, malus et effets de fin de partie sont calculés automatiquement.',
+    intro: 'Calculateur de score pour Fantasy Realms : Mythes grecs. Touchez vos 7 cartes et celles de votre Au-delà : bonus, malus et effets de fin de partie sont calculés pour vous.',
     subtitle: 'Mythes grecs',
     reset: 'Recommencer',
     addTo: 'Ajouter à :',
