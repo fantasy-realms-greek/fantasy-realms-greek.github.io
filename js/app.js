@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'frgl-state';
 
-const state = { lang: 'fr', mode: 'hand', hand: [], afterlife: [], choices: {} };
+const state = { lang: 'fr', mode: 'hand', suit: 'gods', hand: [], afterlife: [], choices: {} };
 
 const storage = {
   load: () => {
@@ -170,34 +170,55 @@ const renderPicked = (result, resolved) => {
   $('#afterlife-score').textContent = inAfterlife.length ? signed(result.afterlifeScore) : '';
 };
 
+// Une famille à la fois : les chips en haut choisissent les cartes affichées.
 const renderDeck = () => {
   const handFull = state.hand.length >= HAND_SIZE;
-  $('#deck').innerHTML = Object.keys(SUITS)
-    .map((suit) => {
-      const cards = CARDS.filter((c) => c.suit === suit);
-      if (!cards.length) return '';
-      return `
-        <div class="suit" style="--suit:${SUITS[suit].color}">
-          <h3>${t(`suits.${suit}`)}</h3>
-          <div class="grid">
-            ${cards.map((c) => {
-              const where = state.hand.includes(c.id) ? 'in-hand' : state.afterlife.includes(c.id) ? 'in-afterlife' : '';
-              const disabled = !isUsed(c.id) && state.mode === 'hand' && handFull;
-              return `
-                <button class="card ${where}" data-card="${c.id}" ${disabled ? 'disabled' : ''}>
-                  <span class="card-top">
-                    <span class="strength">${c.strength}</span>
-                    <span class="name">${cardName(c.id)}</span>
-                  </span>
-                  ${c.tags.length ? `<span class="tags">${tagList(c.tags)}</span>` : ''}
-                  <span class="text">${cardText(c.id)}</span>
-                  ${c.promo ? `<span class="flag promo">${t('ui.promo')}</span>` : ''}
-                </button>`;
-            }).join('')}
-          </div>
-        </div>`;
-    })
-    .join('');
+  const inPlay = (suit) => [...state.hand, ...state.afterlife].filter((id) => cardById(id).suit === suit).length;
+  const tabs = Object.keys(SUITS).map((suit) => {
+    const used = inPlay(suit);
+    return `
+      <button class="suit-tab ${suit === state.suit ? 'active' : ''}" data-suit="${suit}" role="tab"
+        aria-selected="${suit === state.suit}" style="--suit:${SUITS[suit].color}">
+        ${t(`suits.${suit}`)}${used ? `<span class="badge">${used}</span>` : ''}
+      </button>`;
+  }).join('');
+
+  const cards = CARDS.filter((c) => c.suit === state.suit);
+  $('#deck').innerHTML = `
+    <nav class="suit-tabs" role="tablist">${tabs}</nav>
+    <div class="suit" style="--suit:${SUITS[state.suit].color}" role="tabpanel">
+      <div class="grid">
+        ${cards.map((c) => {
+          const where = state.hand.includes(c.id) ? 'in-hand' : state.afterlife.includes(c.id) ? 'in-afterlife' : '';
+          const disabled = !isUsed(c.id) && state.mode === 'hand' && handFull;
+          return `
+            <button class="card ${where}" data-card="${c.id}" ${disabled ? 'disabled' : ''}>
+              <span class="card-top">
+                <span class="strength">${c.strength}</span>
+                <span class="name">${cardName(c.id)}</span>
+              </span>
+              ${c.tags.length ? `<span class="tags">${tagList(c.tags)}</span>` : ''}
+              <span class="text">${cardText(c.id)}</span>
+              ${c.promo ? `<span class="flag promo">${t('ui.promo')}</span>` : ''}
+            </button>`;
+        }).join('')}
+      </div>
+    </div>`;
+};
+
+const selectSuit = (suit) => {
+  state.suit = suit;
+  render();
+  // Si on avait défilé dans les cartes, on revient au début de la nouvelle famille.
+  const deckTop = $('#deck').getBoundingClientRect().top;
+  if (deckTop < $('.topbar').offsetHeight) window.scrollBy({ top: deckTop - $('.topbar').offsetHeight });
+};
+
+// Les chips restent collées sous l'en-tête, dont la hauteur varie selon l'écran.
+const trackTopbarHeight = () => {
+  const update = () => document.documentElement.style.setProperty('--topbar-h', `${$('.topbar').offsetHeight}px`);
+  new ResizeObserver(update).observe($('.topbar'));
+  update();
 };
 
 const render = () => {
@@ -219,6 +240,7 @@ const init = () => {
   state.lang = pickLang();
   state.hand = known(saved.hand).slice(0, HAND_SIZE);
   state.afterlife = known(saved.afterlife);
+  state.suit = SUITS[saved.suit] ? saved.suit : 'gods';
   state.choices = saved.choices && typeof saved.choices === 'object' ? saved.choices : {};
 
   $('#lang').innerHTML = Object.entries(I18N)
@@ -247,9 +269,10 @@ const init = () => {
   });
 
   document.body.addEventListener('click', (e) => {
-    const el = e.target.closest('[data-card],[data-remove],[data-afterlife]');
+    const el = e.target.closest('[data-card],[data-remove],[data-afterlife],[data-suit]');
     if (!el) return;
-    if (el.dataset.card) toggleCard(el.dataset.card);
+    if (el.dataset.suit) selectSuit(el.dataset.suit);
+    else if (el.dataset.card) toggleCard(el.dataset.card);
     else if (el.dataset.remove) toggleCard(el.dataset.remove);
     else moveToAfterlife(el.dataset.afterlife);
   });
@@ -259,6 +282,7 @@ const init = () => {
     if (el) setChoice(el.dataset.choice, el.dataset.key, el.value);
   });
 
+  trackTopbarHeight();
   renderStatic();
   render();
 };
