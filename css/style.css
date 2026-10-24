@@ -77,13 +77,23 @@ body::before {
 
 .logo { display: flex; flex-direction: column; align-items: center; margin: 0; line-height: 1; }
 
+/* Logo sur deux lignes comme sur la boîte : lettrage gothique doré, contour sombre épais. */
 .logo .logo-name {
-  font: 900 1.6rem/1 'Cinzel Decorative', Georgia, serif;
-  background: linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 50%, var(--gold-3) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font: 400 1.9rem/0.88 'New Rocker', 'Pirata One', serif;
+  filter:
+    drop-shadow(1.5px 0 0 #2a1606) drop-shadow(-1.5px 0 0 #2a1606)
+    drop-shadow(0 1.5px 0 #2a1606) drop-shadow(0 -1.5px 0 #2a1606)
+    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.logo .logo-name > span {
+  background: linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 55%, var(--gold-3) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 2px 0 #1a1206) drop-shadow(0 0 1px #1a1206);
 }
 
 .logo .plaque {
@@ -117,13 +127,16 @@ body::before {
 }
 
 .icon-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
   width: 38px;
   height: 38px;
+  padding: 0;
   border: 2px solid var(--gold-2);
   border-radius: 50%;
   background: transparent;
   color: var(--gold-1);
-  font-size: 1.2rem;
   cursor: pointer;
 }
 
@@ -448,7 +461,7 @@ footer {
 }
 
 @media (max-width: 560px) {
-  .logo .logo-name { font-size: 1.15rem; }
+  .logo .logo-name { font-size: 1.3rem; }
   .logo .plaque { font-size: 0.65rem; }
   .score { font-size: 1.8rem; }
   .scorebox { gap: 10px; }

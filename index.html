@@ -33,20 +33,25 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@800&family=Cinzel+Decorative:wght@900&family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@800&family=New+Rocker&family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="topbar">
     <h1 class="logo">
-      <span class="logo-name">Fantasy Realms</span>
+      <span class="logo-name"><span>Fantasy</span> <span>Realms</span></span>
       <span class="plaque" data-i18n="ui.subtitle">Mythes grecs</span>
     </h1>
     <div class="scorebox">
       <select id="lang" class="lang" aria-label="Langue / Language"></select>
       <div class="count"><span id="hand-count">0</span>/<span id="hand-max">7</span></div>
       <div class="score" id="total-score">0</div>
-      <button id="reset" class="icon-btn" data-i18n-title="ui.reset" aria-label="reset">↻</button>
+      <button id="reset" class="icon-btn" data-i18n-title="ui.reset" aria-label="reset">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+          <path d="M21 3v5h-5"/>
+        </svg>
+      </button>
     </div>
   </header>
 
