@@ -9,7 +9,7 @@ const site = new Function('window', `
   ${load('i18n/en.js')}
   ${load('js/cards.js')}
   ${load('js/scoring.js')}
-  return { I18N, CARDS, TAGS, SUITS, scoreHand, bestChoices, choiceSlots };
+  return { I18N, CARDS, TAGS, SUITS, scoreHand, bestChoices, choiceSlots, discardAdvice };
 `)(globalThis);
 
 const play = (hand, afterlife = [], choices = {}) => site.scoreHand(hand, afterlife, choices);

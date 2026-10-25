@@ -194,3 +194,21 @@ const bestChoices = (handIds, afterlifeIds, fixed = {}) => {
   }
   return choices;
 };
+
+// ---------- Mode aide ----------
+// Avec une carte de trop en main, compare chaque façon de revenir à 7 : défausser une carte, ou
+// l'envoyer dans l'Au-delà quand son texte le permet. Les effets de pioche de ces défausses
+// (Oracle, Moires, Corne d'abondance…) ne sont pas simulés.
+
+const discardAdvice = (handIds, afterlifeIds, fixed = {}) => handIds
+  .flatMap((id) => {
+    const rest = handIds.filter((c) => c !== id);
+    const discard = { cardId: id, to: 'discard', hand: rest, afterlife: afterlifeIds };
+    const toAfterlife = { cardId: id, to: 'afterlife', hand: rest, afterlife: [...afterlifeIds, id] };
+    return cardById(id).toAfterlife ? [discard, toAfterlife] : [discard];
+  })
+  .map(({ cardId, to, hand, afterlife }) => {
+    const choices = bestChoices(hand, afterlife, fixed);
+    return { cardId, to, total: scoreHand(hand, afterlife, choices).total };
+  })
+  .sort((a, b) => b.total - a.total);

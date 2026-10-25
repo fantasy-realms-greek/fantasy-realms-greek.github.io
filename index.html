@@ -58,11 +58,19 @@
   <main>
     <p class="intro" data-i18n="ui.intro">Calculateur de score (scoring) pour Fantasy Realms : Mythes grecs. Touchez vos 7 cartes et celles de votre Au-delà : bonus, malus et effets de fin de partie sont calculés pour vous.</p>
 
-    <nav class="mode" role="radiogroup">
-      <span data-i18n="ui.addTo">Ajouter à :</span>
-      <button data-mode="hand" class="active" data-i18n="ui.hand">Main</button>
-      <button data-mode="afterlife" data-i18n="ui.afterlife">Au-delà</button>
-    </nav>
+    <div class="controls">
+      <nav class="mode" role="radiogroup">
+        <span data-i18n="ui.addTo">Ajouter à :</span>
+        <button data-mode="hand" class="active" data-i18n="ui.hand">Main</button>
+        <button data-mode="afterlife" data-i18n="ui.afterlife">Au-delà</button>
+      </nav>
+      <div class="toggles">
+        <button id="toggle-help" class="toggle" aria-pressed="false" data-i18n="ui.help">Aide (8 cartes)</button>
+        <button id="toggle-compact" class="toggle" aria-pressed="false" data-i18n="ui.compact">Compact</button>
+      </div>
+    </div>
+
+    <section id="advice" class="panel advice" hidden></section>
 
     <section class="panel">
       <h2 data-i18n="ui.hand">Main</h2>

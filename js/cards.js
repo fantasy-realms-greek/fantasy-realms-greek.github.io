@@ -12,6 +12,7 @@
 //   effects    effets de fin de partie : [{ step, kind: 'bonus'|'penalty', run(ctx) }]
 //   choices    cibles choisies par le joueur : [{ key, type, optional }] (voir CHOICE_TYPES)
 //   promo      carte promotionnelle, hors des 79 cartes
+//   toAfterlife  « Peut être défaussé vers l'Au-delà » : le mode aide propose cette défausse
 //
 // `ctx` : voir scoring.js. Sauf mention « autre », une carte ne se compte jamais elle-même.
 // Dans `effects`, une condition sur les icônes utilise `ctx.hadTag` (état du début de l'étape).
@@ -86,9 +87,9 @@ const CARDS = [
     id: 'demeter', n: 5, suit: 'gods', strength: 5, tags: ['plant'],
     bonus: (ctx) => 5 * ctx.countTag('plant'),
   },
-  { id: 'fates', n: 6, suit: 'gods', strength: 3, tags: [] },
+  { id: 'fates', n: 6, suit: 'gods', strength: 3, tags: [], toAfterlife: true },
   {
-    id: 'hades', n: 7, suit: 'gods', strength: 3, tags: [],
+    id: 'hades', n: 7, suit: 'gods', strength: 3, tags: [], toAfterlife: true,
     bonus: (ctx) => 3 * ctx.countAfterlife(),
   },
   {
@@ -118,7 +119,7 @@ const CARDS = [
   {
     // Chaque paire (une carte dans l'Au-delà, un VÉGÉTAL) rapporte 6 ; un VÉGÉTAL
     // dans l'Au-delà compte des deux côtés.
-    id: 'persephone', n: 13, suit: 'gods', strength: 3, tags: ['plant'],
+    id: 'persephone', n: 13, suit: 'gods', strength: 3, tags: ['plant'], toAfterlife: true,
     bonus: (ctx) => 6 * Math.min(ctx.countAfterlife(), ctx.countTag('plant')),
   },
   {
@@ -234,7 +235,7 @@ const CARDS = [
       run: (ctx) => ctx.clear(ctx.choice('monster'), { penalty: true }),
     }],
   },
-  { id: 'cornucopia', n: 38, suit: 'items', strength: 2, tags: ['plant'] },
+  { id: 'cornucopia', n: 38, suit: 'items', strength: 2, tags: ['plant'], toAfterlife: true },
   {
     id: 'golden_apples', n: 39, suit: 'items', strength: 3, tags: ['plant'],
     bonus: (ctx) => (ctx.hasSuit('quests') ? 14 : 0),
@@ -262,7 +263,7 @@ const CARDS = [
     }],
   },
   {
-    id: 'pomegranate', n: 43, suit: 'items', strength: 6, tags: ['plant'],
+    id: 'pomegranate', n: 43, suit: 'items', strength: 6, tags: ['plant'], toAfterlife: true,
     choices: [{ key: 'god', type: 'handGod' }],
     effects: [{
       step: STEP.ENDGAME,
@@ -303,28 +304,28 @@ const CARDS = [
     id: 'mount_olympus', n: 49, suit: 'locations', strength: 6, tags: ['divine'],
     bonus: (ctx) => 6 * ctx.countSuit('gods'),
   },
-  { id: 'oracle_delphi', n: 50, suit: 'locations', strength: 7, tags: ['divine'] },
+  { id: 'oracle_delphi', n: 50, suit: 'locations', strength: 7, tags: ['divine'], toAfterlife: true },
   {
     id: 'palace', n: 51, suit: 'locations', strength: 7, tags: [],
     bonus: (ctx) => (ctx.countTag('monarch') ? 7 : 0) + 7 * ctx.countTag('artistic'),
   },
   {
-    id: 'persephones_garden', n: 52, suit: 'locations', strength: 4, tags: ['divine', 'plant'],
+    id: 'persephones_garden', n: 52, suit: 'locations', strength: 4, tags: ['divine', 'plant'], toAfterlife: true,
     bonus: (ctx) => 4 * ctx.count((c) => c.card.suit === 'items' && ctx.hasTag(c, 'plant')),
   },
   {
     // Son malus fait aussi oublier bonus et icônes des HÉROS dans l'Au-delà (voir scoring.js).
-    id: 'river_lethe', n: 53, suit: 'locations', strength: 6, tags: ['aquatic', 'divine'],
+    id: 'river_lethe', n: 53, suit: 'locations', strength: 6, tags: ['aquatic', 'divine'], toAfterlife: true,
     forgetsDeadHeroes: true,
     penalty: (ctx) => (ctx.self.zone === 'afterlife' ? 0 : -20),
   },
   {
-    id: 'river_styx', n: 54, suit: 'locations', strength: 0, tags: ['aquatic', 'divine', 'magic'],
+    id: 'river_styx', n: 54, suit: 'locations', strength: 0, tags: ['aquatic', 'divine', 'magic'], toAfterlife: true,
     bonus: (ctx) => (ctx.hasSuit('gods') && ctx.living.length ? 5 : 0),
     penalty: (ctx) => (ctx.self.zone === 'afterlife' ? 0 : -20),
   },
   {
-    id: 'sacrificial_altar', n: 55, suit: 'locations', strength: 0, tags: ['divine'],
+    id: 'sacrificial_altar', n: 55, suit: 'locations', strength: 0, tags: ['divine'], toAfterlife: true,
     bonus: (ctx) => 7 * ctx.countDeadHeroes(),
   },
   {
@@ -346,7 +347,7 @@ const CARDS = [
     effects: [heroesToAfterlifeUnless((ctx) => ctx.livingAtEndgame.length >= 3)],
   },
   {
-    id: 'cerberus', n: 60, suit: 'monsters', strength: 5, tags: ['hostile'],
+    id: 'cerberus', n: 60, suit: 'monsters', strength: 5, tags: ['hostile'], toAfterlife: true,
     bonus: (ctx) => 5 * ctx.countDeadHeroes(),
     penalty: (ctx) => (ctx.self.zone === 'afterlife' ? 0 : -5),
   },
